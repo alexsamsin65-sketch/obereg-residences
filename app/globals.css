@@ -1,26 +1,181 @@
 @import "tailwindcss";
 
+/* ============================================================
+   ДИЗАЙН-СИСТЕМА «ОБЕРЁГ» — премиум-лендинг элитного ЖК
+   Tailwind v4: токены через @theme, палитра — тёплые оттенки
+   ============================================================ */
+
+@theme {
+  /* ---- Палитра (тёплые оттенки, никаких чистых #000/#fff) ---- */
+  --color-ink: #0e0d0b; /* почти-чёрный, тёплый — основной фон */
+  --color-ink-2: #15130f; /* чуть светлее для слоёв */
+  --color-bone: #f4efe6; /* тёплый кремовый — светлые секции, текст */
+  --color-bone-2: #e8e1d3; /* приглушённый кремовый */
+  --color-brass: #b8975c; /* латунь/золото — акцент, тонкие линии, hover */
+  --color-brass-soft: #c9ae80; /* мягкая латунь */
+  --color-forest: #1c2722; /* глубокий тёмно-зелёный — вторичный фон */
+  --color-stone: #8a847a; /* серо-бежевый — вспомогательный текст */
+  --color-stone-2: #6b665e; /* более тёмный stone */
+  --color-line: rgba(184, 151, 92, 0.2); /* hairline-разделители */
+
+  /* ---- Шрифты (пробрасываются из next/font в layout.tsx) ---- */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+
+  /* ---- Базовая типографика ---- */
+  --text-display: 5rem; /* крупные заголовки переопределяются инлайн */
+  --leading-tight: 0.98;
+  --tracking-tight: -0.02em;
+
+  /* ---- Кастомные ease для motion ---- */
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1); /* expo.out — роскошный */
+  --ease-power: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---- Контейнер ---- */
+  --spacing-section: 11rem; /* 176px — вертикальный отступ секций */
+}
+
+/* ============================================================
+   БАЗОВЫЕ СТИЛИ
+   ============================================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-ink);
+  --foreground: var(--color-bone);
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  border-color: var(--color-line);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Lenis управляет скроллом — отключаем нативный smooth */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ============================================================
+   ТИПОГРАФИКА — утилитарные классы
+   ============================================================ */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 400; /* Fraunces в высоком контрасте красив на 400 */
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* Лейблы/надзаголовки */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-brass);
+}
+
+/* Табличные цифры для счётчиков/площадей */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Hairline-разделитель */
+.hairline {
+  height: 1px;
+  background: var(--color-line);
+  border: none;
+}
+
+/* ============================================================
+   ВЫДЕЛЕНИЕ / СКРОЛЛБАР
+   ============================================================ */
+::selection {
+  background: var(--color-brass);
+  color: var(--color-ink);
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ============================================================
+   КУРСОР — скрываем системный на десктопе (кастомный берёт на себя)
+   ============================================================ */
+@media (hover: hover) and (pointer: fine) {
+  /* Не скрываем полностью — лишь косметика; компонент Cursor рисует поверх */
+  body {
+    cursor: none;
+  }
+  a,
+  button,
+  [data-cursor] {
+    cursor: none;
+  }
+}
+
+/* ============================================================
+   PREFERS-REDUCED-MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   УТИЛИТЫ ДЛЯ СЕКЦИЙ
+   ============================================================ */
+.section-pad {
+  padding-top: var(--spacing-section);
+  padding-bottom: var(--spacing-section);
+}
+
+.container-luxe {
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: clamp(1.5rem, 7vw, 6rem);
+}
+
+/* Киношный vignette для тёмных секций */
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
 }
