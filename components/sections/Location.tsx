@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, registerGsap } from "@/lib/gsap";
 import Reveal, { RevealLine } from "@/components/ui/Reveal";
 import { LOCATION } from "@/lib/constants";
 
@@ -31,6 +31,7 @@ export default function Location() {
       return;
     }
 
+    registerGsap();
     const ctx = gsap.context(() => {
       // Точки появляются со stagger
       const points = pointsRef.current.filter((g): g is SVGGElement => g !== null);

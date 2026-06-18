@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ScrollTrigger } from "@/lib/gsap";
+import { ScrollTrigger, registerGsap } from "@/lib/gsap";
 
 /**
  * useScrollProgress — привязывает прогресс пин-секции (0..1) к ref.
@@ -46,6 +46,9 @@ export function useScrollProgress(
   useEffect(() => {
     const el = triggerRef.current;
     if (!el) return;
+
+    // Гарантируем, что плагин зарегистрирован ДО создания триггера
+    registerGsap();
 
     const st = ScrollTrigger.create({
       trigger: el,

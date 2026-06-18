@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, registerGsap } from "@/lib/gsap";
 import Reveal, { RevealLine } from "@/components/ui/Reveal";
 import { AMENITIES } from "@/lib/constants";
 
@@ -22,6 +22,7 @@ export default function Amenities() {
     const cards = gridRef.current?.querySelectorAll("[data-amenity]");
     if (!cards?.length) return;
 
+    registerGsap();
     const ctx = gsap.context(() => {
       gsap.fromTo(
         cards,

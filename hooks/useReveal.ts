@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger, registerGsap } from "@/lib/gsap";
 
 /**
  * useReveal — построчный reveal контента по ScrollTrigger.
@@ -25,6 +25,9 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    // Гарантируем регистрацию плагина до любого gsap.context()
+    registerGsap();
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const lines = el.querySelectorAll<HTMLElement>("[data-reveal-line]");
@@ -78,6 +81,8 @@ export function useImageReveal<T extends HTMLElement = HTMLDivElement>(
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    registerGsap();
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;

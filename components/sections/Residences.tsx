@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger, registerGsap } from "@/lib/gsap";
 import Reveal, { RevealLine } from "@/components/ui/Reveal";
 import { RESIDENCES } from "@/lib/constants";
 
@@ -27,6 +27,7 @@ export default function Residences() {
       return;
     }
 
+    registerGsap();
     const ctx = gsap.context(() => {
       // Пин секцию и двигаем трек по горизонтали
       const totalScroll = track.scrollWidth - window.innerWidth;

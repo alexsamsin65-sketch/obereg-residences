@@ -146,14 +146,16 @@ function HeroPoster() {
           borderTop: "1px solid rgba(184,151,92,0.3)",
         }}
       >
-        {/* Имитация окон */}
+        {/* Имитация окон — детерминированный паттерн (без Math.random,
+            чтобы избежать hydration mismatch SSR↔client) */}
         <div className="grid h-full w-full grid-cols-4 gap-1 p-3 opacity-40">
           {Array.from({ length: 32 }).map((_, i) => (
             <div
               key={i}
               style={{
                 backgroundColor:
-                  Math.random() > 0.5
+                  // Псевдослучайный, но стабильный паттерн на основе индекса
+                  Math.sin(i * 12.9898) * 43758.5453 % 1 > 0.2
                     ? "rgba(184,151,92,0.4)"
                     : "transparent",
               }}

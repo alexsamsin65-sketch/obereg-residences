@@ -5,15 +5,22 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
  * Регистрация GSAP-плагинов.
- * Вызывается один раз на клиенте (в SmoothScroll provider либо при первом использовании).
- * Повторная регистрация безопасна — gsap internally дедуплит.
+ * Идемпотентна: повторные вызовы безопасны (GSAP дедуплит внутренне).
+ * Регистрируем при первом импорте модуля на клиенте — гарантирует,
+ * что плагин готов ДО любого ScrollTrigger.create() / gsap.context().
+ *
+ * Ранее была ошибка "_context is not a function": ScrollTrigger
+ * использовался до регистрации. Теперь регистрация происходит
+ * синхронно при загрузке модуля.
  */
-let registered = false;
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function registerGsap() {
-  if (registered || typeof window === "undefined") return;
-  gsap.registerPlugin(ScrollTrigger);
-  registered = true;
+  if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+  }
 }
 
 export { gsap, ScrollTrigger };

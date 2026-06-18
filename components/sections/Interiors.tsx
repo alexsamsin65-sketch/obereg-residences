@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, registerGsap } from "@/lib/gsap";
 import { useImageReveal, ScrollTrigger } from "@/hooks/useReveal";
 import Reveal, { RevealLine } from "@/components/ui/Reveal";
 import { INTERIORS } from "@/lib/constants";
@@ -71,6 +71,7 @@ function InteriorSlideshow() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
 
+    registerGsap();
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
       tl.fromTo(

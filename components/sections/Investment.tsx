@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { gsap, registerGsap } from "@/lib/gsap";
 import Reveal, { RevealLine } from "@/components/ui/Reveal";
 import { INVESTMENT } from "@/lib/constants";
 
@@ -21,6 +21,7 @@ export default function Investment() {
     const counters = countersRef.current?.querySelectorAll("[data-counter]");
     if (!counters?.length) return;
 
+    registerGsap();
     const ctx = gsap.context(() => {
       counters.forEach((el) => {
         const target = parseFloat(el.getAttribute("data-counter") ?? "0");
@@ -120,6 +121,7 @@ function InvestmentChart() {
     path.style.strokeDasharray = String(len);
     path.style.strokeDashoffset = String(len);
 
+    registerGsap();
     const ctx = gsap.context(() => {
       gsap.to(path, {
         strokeDashoffset: 0,
